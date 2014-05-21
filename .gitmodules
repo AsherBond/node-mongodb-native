@@ -1,0 +1,3 @@
+[submodule "gh-pages-docs"]
+	path = gh-pages-docs
+	url = https://github.com/mongodb/node-mongodb-native.git

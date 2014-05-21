@@ -16,6 +16,6 @@ build
 upload.py
 rcover_html/
 results/
-gh-pages/
+gh-pages-docs/
 .coverage_data/
 docs/sphinx-docs/source/driver-articles/

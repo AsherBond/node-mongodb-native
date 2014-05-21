@@ -24,7 +24,7 @@ test_auth:
 generate_docs:
 	$(NODE) dev/tools/build-docs.js
 	make --directory=./docs/sphinx-docs --file=Makefile html
-	cp -R docs/sphinx-docs/build/html/ ./gh-pages/.
-	rm ./gh-pages/.buildinfo
+	cp -R docs/sphinx-docs/build/html/ ./gh-pages-docs/.
+	rm ./gh-pages-docs/.buildinfo
 
 .PHONY: total

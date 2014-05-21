@@ -19,6 +19,7 @@ dev/
 examples/
 test/
 performance/
+gh-pages-docs/
 .coverage_data/
 
 external-libs/bson/build/
