@@ -7,7 +7,7 @@
 exports.shouldCreateASimpleIndexOnASingleField = function(configuration, test) {
   var db = configuration.newDbInstance({w:0}, {poolSize:1, auto_reconnect:true});
 
-  // DOC_LINE var db = new Db('test', new Server('locahost', 27017));
+  // DOC_LINE var db = new Db('test', new Server('localhost', 27017));
   // DOC_START
   // Establish connection to db
   db.open(function(err, db) {
@@ -47,7 +47,7 @@ exports.shouldCreateASimpleIndexOnASingleField = function(configuration, test) {
 exports.shouldCreateComplexIndexOnTwoFields = function(configuration, test) {
   var db = configuration.newDbInstance({w:0}, {poolSize:1, auto_reconnect:true});
 
-  // DOC_LINE var db = new Db('test', new Server('locahost', 27017));
+  // DOC_LINE var db = new Db('test', new Server('localhost', 27017));
   // DOC_START
   // Establish connection to db
   db.open(function(err, db) {
@@ -98,7 +98,7 @@ exports.shouldCreateComplexIndexOnTwoFields = function(configuration, test) {
 exports.shouldCreateComplexEnsureIndex = function(configuration, test) {
   var db = configuration.newDbInstance({w:0}, {poolSize:1, auto_reconnect:true});
 
-  // DOC_LINE var db = new Db('test', new Server('locahost', 27017));
+  // DOC_LINE var db = new Db('test', new Server('localhost', 27017));
   // DOC_START
   // Establish connection to db
   db.open(function(err, db) {
@@ -146,7 +146,7 @@ exports.shouldCreateComplexEnsureIndex = function(configuration, test) {
 exports.shouldCorrectlyShowAllTheResultsFromIndexInformation = function(configuration, test) {
   var db = configuration.newDbInstance({w:0}, {poolSize:1, auto_reconnect:true});
 
-  // DOC_LINE var db = new Db('test', new Server('locahost', 27017));
+  // DOC_LINE var db = new Db('test', new Server('localhost', 27017));
   // DOC_START
   // Establish connection to db
   db.open(function(err, db) {
@@ -194,7 +194,7 @@ exports.shouldCorrectlyShowAllTheResultsFromIndexInformation = function(configur
 exports.shouldCorrectlyCreateAndDropIndex = function(configuration, test) {
   var db = configuration.newDbInstance({w:0}, {poolSize:1, auto_reconnect:true});
 
-  // DOC_LINE var db = new Db('test', new Server('locahost', 27017));
+  // DOC_LINE var db = new Db('test', new Server('localhost', 27017));
   // DOC_START
   // Establish connection to db
   db.open(function(err, db) {
@@ -241,7 +241,7 @@ exports.shouldCorrectlyCreateAndDropIndex = function(configuration, test) {
 exports.shouldCorrectlyCreateAndDropAllIndex = function(configuration, test) {
   var db = configuration.newDbInstance({w:0}, {poolSize:1, auto_reconnect:true});
 
-  // DOC_LINE var db = new Db('test', new Server('locahost', 27017));
+  // DOC_LINE var db = new Db('test', new Server('localhost', 27017));
   // DOC_START
   // Establish connection to db
   db.open(function(err, db) {
@@ -294,7 +294,7 @@ exports.shouldCorrectlyCreateAndDropAllIndex = function(configuration, test) {
 exports.shouldCorrectlyIndexAndForceReindexOnCollection = function(configuration, test) {
   var db = configuration.newDbInstance({w:0}, {poolSize:1, auto_reconnect:true});
 
-  // DOC_LINE var db = new Db('test', new Server('locahost', 27017));
+  // DOC_LINE var db = new Db('test', new Server('localhost', 27017));
   // DOC_START
   // Establish connection to db
   db.open(function(err, db) {
@@ -886,6 +886,32 @@ exports['should correctly apply hint to find'] = function(configuration, test) {
             db.close();
             test.done();
           });
+        });
+      });
+    });
+  });
+}
+
+exports['should correctly set language_override option'] = function(configuration, test) {
+  var db = configuration.newDbInstance({w:1}, {poolSize:1});
+  db.open(function(err, db) {
+    var collection = db.collection("should_correctly_set_language_override");
+    collection.insert([{text:'Lorem ipsum dolor sit amet.', langua:'italian'}], function(err, result) {
+      test.equal(null, err);
+
+      collection.ensureIndex({text:'text'}, {language_override:'langua', name:'language_override_index'}, function(err, result) {
+        test.equal(null, err);
+
+        collection.indexInformation({full:true}, function(err, indexInformation) {
+          test.equal(null, err);
+          for (var i = 0; i < indexInformation.length; i++) {
+            if (indexInformation[i].name === 'language_override_index')
+              test.equal(indexInformation[i].language_override, 'langua')
+          }
+
+          db.close();
+          test.done();
+
         });
       });
     });
